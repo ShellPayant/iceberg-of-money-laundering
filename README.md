@@ -1,6 +1,6 @@
 # The Iceberg of Money Laundering
 
-An interactive, illustrated long-read on the hidden architecture of money laundering — a guided descent from a €1.80 phishing text down to the banks that stopped being banks.
+An interactive, illustrated long-read on the hidden architecture of money laundering, a guided descent from a €1.80 phishing text down to the banks that stopped being banks.
 
 **Live:** https://ShellPayant.github.io/iceberg-of-money-laundering/
 
