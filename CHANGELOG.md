@@ -5,6 +5,7 @@ Notable changes to the published essay. The working canon lives in DESIGN.md; co
 ## 2026-07-29
 
 ### Added
+- The Record now opens as an X-ray: an ordinary living-room wall, one scan pass that lights up the cash coursework hidden inside it, then the frame resolves into the evidence photograph. Plays once on entering the viewport, replayable from a chip, straight to the final exhibit under reduced motion; the figure clicks through to the Guardian's report on the arrest.
 - Plate B (The record) carries its first real evidence photograph: a Policía Nacional handout still from the November 2024 search, an investigator's hand pressing vacuum-sealed rolls of euros. The asset stays untouched colour on disk; a live navy/ice duotone (inline SVG filter `#duo-ice`, sRGB) grades it into the palette, and hovering reveals the true colours. Corner ticks, plate chip and credit chip frame it as an exhibit.
 - `img/` assets with provenance and rejected-candidate notes (`img/SOURCES.md`), including the portrait alternates from the same police set.
 - `DESIGN.md`: the house style canon. Voice and sentence craft, punctuation rules, the six-token palette discipline, illustration and evidence-photo doctrine, interaction grammar, the anti-AI-tells checklist, and the pre-ship checklist. Supersedes the visual-plan documents.
