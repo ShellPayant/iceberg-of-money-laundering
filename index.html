@@ -243,6 +243,30 @@ a:hover{border-bottom-color:var(--ice-soft)}
 .img-slot.loaded .art svg,.img-slot.loaded .plate{display:none}
 .img-slot .plate{position:absolute;left:14px;bottom:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(127,179,213,.55)}
 .img-slot figcaption{font-family:var(--sans);font-size:14px;color:var(--ink-faint);margin-top:12px;line-height:1.55;text-align:center;max-width:56ch;margin-left:auto;margin-right:auto}
+/* ---------- photo evidence slots: real photographs graded into the palette ----------
+   Two stacked copies of the same photo: colour original under, duotoned copy on top.
+   filter:url() cannot be transitioned, so the reveal fades the top layer's opacity. */
+.img-slot.photo .art img.duo{filter:contrast(1.12) brightness(.93) url(#duo-ice);transition:opacity .55s ease}
+.img-slot.photo .art::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(115% 92% at 50% 42%, rgba(11,22,38,0) 52%, rgba(11,22,38,.45) 100%);transition:opacity .55s ease}
+.img-slot.photo.loaded .art::after{opacity:1}
+.img-slot.photo.loaded .art::before{content:"";position:absolute;inset:10px;pointer-events:none;z-index:1;background-image:
+  linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),
+  linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),
+  linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),
+  linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65)),linear-gradient(rgba(127,179,213,.65),rgba(127,179,213,.65));
+  background-repeat:no-repeat;
+  background-size:12px 1px,1px 12px,12px 1px,1px 12px,12px 1px,1px 12px,12px 1px,1px 12px;
+  background-position:top left,top left,top right,top right,bottom left,bottom left,bottom right,bottom right}
+.img-slot.photo.loaded .plate{display:block;z-index:2}
+.img-slot.photo .credit{display:none;position:absolute;right:14px;bottom:12px;z-index:2;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(127,179,213,.62);transition:color .55s ease}
+.img-slot.photo.loaded .credit{display:block}
+.img-slot.photo.loaded .plate,.img-slot.photo .credit{background:rgba(8,14,24,.6);padding:3px 8px;border-radius:4px}
+@media(hover:hover){
+  .img-slot.photo .art:hover img.duo{opacity:0}
+  .img-slot.photo .art:hover::after{opacity:0}
+  .img-slot.photo .art:hover .credit{color:rgba(237,232,223,.85)}
+}
+@media(prefers-reduced-motion:reduce){.img-slot.photo .art img.duo,.img-slot.photo .art::after,.img-slot.photo .credit{transition:none}}
 .ph-motif{stroke:rgba(127,179,213,.32);fill:none;stroke-width:1.2}
 .ph-motif-f{fill:rgba(127,179,213,.09);stroke:rgba(127,179,213,.26);stroke-width:1.1}
 .ph-acc{stroke:rgba(162,214,247,.6);fill:none;stroke-width:1.4}
@@ -511,6 +535,14 @@ footer .f-note{font-family:var(--sans);font-size:13px;color:var(--ink-faint);max
 </head>
 
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="duo-ice" color-interpolation-filters="sRGB">
+  <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0 .2126 .7152 .0722 0 0 .2126 .7152 .0722 0 0 0 0 0 1 0"/>
+  <feComponentTransfer>
+    <feFuncR type="table" tableValues="0.031 0.086 0.278 0.737"/>
+    <feFuncG type="table" tableValues="0.063 0.157 0.431 0.827"/>
+    <feFuncB type="table" tableValues="0.102 0.243 0.561 0.894"/>
+  </feComponentTransfer>
+</filter></svg>
 <div id="mprog"><div class="mp-bar"></div></div>
 <nav id="gauge" aria-label="Depth navigation"></nav>
 
@@ -642,7 +674,7 @@ const GUIDE_DEF = {
 
 /* ---------- image slots: drop img/img-<id>.webp (or .jpg/.png) next to this file to replace a placeholder ---------- */
 const IMGS = {
-  b:  {ratio:"16/9", plate:"Plate B · The record", cap:"Twenty-one million euros, counted by hand. Most of it hidden inside a police inspector's walls: the cash the best network in Europe could not get rid of.", motif:"warehouse"},
+  b:  {ratio:"16/9", plate:"Plate B · The record", photo:true, credit:"Evidence photo · Policía Nacional", alt:"Vacuum-sealed rolls of euro banknotes laid out on a dark kitchen counter during the search, an investigator’s hand pressing one of the bundles flat", cap:"Twenty-one million euros, counted by hand. Most of it bricked up inside the walls of chief inspector Óscar Sánchez Gil, head of Madrid’s financial-crime unit: the cash the best network in Europe could not get rid of.", motif:"warehouse"},
   c:  {ratio:"16/9", plate:"Plate C · The net", cap:"One text, a few hundred thousand phones. A fraction click, and a fraction of those pay.", motif:"phone"},
   d:  {ratio:"16/9", plate:"Plate D · The listing", cap:"A beautiful apartment at a good price, and every hopeful renter sends a passport to a stranger.", motif:"door"},
   e:  {ratio:"1/1",  plate:"Plate E · The seam", cap:"The camera is ‘broken.' Support offers a helpful alternative. The helpful alternative is the way in.", motif:"crack", sq:true},
@@ -717,9 +749,9 @@ function phArt(motif,ratio){
 }
 function imgSlot(id){
   const d=IMGS[id]; if(!d) return '';
-  return '<figure class="img-slot rv'+(d.sq?' sq':'')+'" data-img="'+id+'">'+
+  return '<figure class="img-slot rv'+(d.sq?' sq':'')+(d.photo?' photo':'')+'" data-img="'+id+'">'+
     '<div class="art" style="aspect-ratio:'+d.ratio+'">'+phArt(d.motif,d.ratio)+
-    '<img alt="" loading="lazy"><span class="plate">'+d.plate.split('·').pop().trim()+'</span></div>'+
+    '<img alt="'+(d.alt||'')+'">'+(d.photo?'<img class="duo" alt="" aria-hidden="true">':'')+(d.credit?'<span class="credit">'+d.credit+'</span>':'')+'<span class="plate">'+d.plate.split('·').pop().trim()+'</span></div>'+
     '<figcaption>'+d.cap+'</figcaption></figure>';
 }
 
@@ -1718,7 +1750,7 @@ function renderAll(){
     const tries=['img/img-'+id+'.webp','img/img-'+id+'.jpg','img/img-'+id+'.png'];
     let t=0;
     im.onerror=()=>{ t++; if(t<tries.length) im.src=tries[t]; };
-    im.onload=()=>fig.classList.add('loaded');
+    im.onload=()=>{ fig.classList.add('loaded'); const du=fig.querySelector('img.duo'); if(du) du.src=im.src; };
     im.src=tries[0];
   });
 }
